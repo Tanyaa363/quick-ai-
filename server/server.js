@@ -13,26 +13,32 @@ connectCloudinary().catch((err) =>
   console.error("Cloudinary init error:", err.message)
 );
 
-// Enable CORS for all origins & HTTP methods to prevent 405/CORS issues on Vercel
+// Universal CORS & Preflight middleware for Vercel Serverless deployments
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 app.use(
   cors({
     origin: "*",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allowedHeaders: [
-      "X-CSRF-Token",
-      "X-Requested-With",
-      "Accept",
-      "Accept-Version",
-      "Content-Length",
-      "Content-MD5",
-      "Content-Type",
-      "Date",
-      "X-Api-Version",
-      "Authorization",
-    ],
+    allowedHeaders: ["*"],
   })
 );
+
 
 
 app.use(express.json());
@@ -48,7 +54,11 @@ app.use(
 app.get("/", (req, res) => res.send("Server is Live!"));
 
 app.use("/api/ai", aiRouter);
+app.use("/ai", aiRouter);
+
 app.use("/api/user", userRouter);
+app.use("/user", userRouter);
+
 
 // 404 handler for unhandled API routes
 app.use((req, res, next) => {
