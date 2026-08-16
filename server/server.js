@@ -33,7 +33,6 @@ app.use(
     ],
   })
 );
-app.options("*", (req, res) => res.sendStatus(200));
 
 
 app.use(express.json());
