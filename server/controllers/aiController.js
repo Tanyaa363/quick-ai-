@@ -17,27 +17,11 @@ const cleanAIResponse = (text) => {
   return text.replace(/<thought>[\s\S]*?<\/thought>/gi, "").trim();
 };
 
-// Helper function to enforce 10 free generations limit for non-pro users
+// Helper function: Unlimited generations for all users
 const checkAndIncrementUsage = async (userId, plan, free_usage) => {
-  if (plan !== "premium" && free_usage >= 10) {
-    return {
-      allowed: false,
-      message: "You have reached your limit of 10 free generations. Upgrade to Pro for unlimited access!",
-    };
-  }
-
-  if (plan !== "premium") {
-    try {
-      await clerkClient.users.updateUserMetadata(userId, {
-        privateMetadata: { free_usage: free_usage + 1 },
-      });
-    } catch (err) {
-      console.error("Error updating Clerk free_usage metadata:", err.message);
-    }
-  }
-
   return { allowed: true };
 };
+
 
 export const generateArticle = async (req, res) => {
   try {

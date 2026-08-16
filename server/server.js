@@ -51,9 +51,13 @@ app.use("/api/ai", aiRouter);
 app.use("/api/user", userRouter);
 
 // 404 handler for unhandled API routes
-app.use("/api", (req, res) => {
-  res.status(404).json({ success: false, message: "API endpoint not found" });
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api")) {
+    return res.status(404).json({ success: false, message: "API endpoint not found" });
+  }
+  next();
 });
+
 
 // Global error handling middleware
 app.use((err, req, res, next) => {

@@ -61,10 +61,11 @@ const Sidebar = ({ sidebar, setSidebar }) => {
                   {user?.fullName || "User Profile"}
                 </h2>
                 <div className="flex items-center gap-1.5 mt-0.5">
-                  <Badge variant="primary" className="text-[10px] font-bold">
-                    Free (10 Limit)
+                  <Badge variant="success">
+                    Unlimited Access
                   </Badge>
                 </div>
+
 
 
               </div>
