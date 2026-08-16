@@ -13,18 +13,25 @@ axios.defaults.baseURL =
   "";
 
 
-// Import your Publishable Key
-const PUBLISHABLE_KEY =
-  import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ||
-  "pk_test_ZXhhbXBsZS1jbGVyay1rZXkuY2xlcmsuYWNjb3VudHMuZGV2JA";
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
-createRoot(document.getElementById("root")).render(
-  <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-    <ThemeProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ThemeProvider>
-  </ClerkProvider>
-);
+const RootApp = () => {
+  return (
+    <ClerkProvider
+      publishableKey={
+        PUBLISHABLE_KEY ||
+        "pk_test_ZXhhbXBsZS1jbGVyay1rZXkuY2xlcmsuYWNjb3VudHMuZGV2JA"
+      }
+    >
+      <ThemeProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
+    </ClerkProvider>
+  );
+};
+
+createRoot(document.getElementById("root")).render(<RootApp />);
+
 
