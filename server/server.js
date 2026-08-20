@@ -39,15 +39,6 @@ app.use(
   })
 );
 
-// Middleware to normalize Vercel serverless request URLs
-app.use((req, res, next) => {
-  const realUrl = req.headers["x-matched-path"] || req.url;
-  if (realUrl && realUrl !== req.url && realUrl.startsWith("/api")) {
-    req.url = realUrl;
-  }
-  next();
-});
-
 app.use(express.json());
 app.use(
   clerkMiddleware({
@@ -61,16 +52,12 @@ app.use(
 
 app.get("/", (req, res) => res.send("Server is Live!"));
 
-// Mount API routers across all possible Vercel rewrite URL variations
+// Mount API routers
 app.use("/api/ai", aiRouter);
 app.use("/ai", aiRouter);
 
 app.use("/api/user", userRouter);
 app.use("/user", userRouter);
-
-// Fallback mounts for single-level rewrites or stripped paths
-app.use("/api", aiRouter);
-app.use("/api", userRouter);
 
 // 404 handler for unhandled API routes
 app.use((req, res, next) => {
