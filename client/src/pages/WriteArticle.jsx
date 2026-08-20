@@ -9,8 +9,6 @@ import { Button } from "../components/ui/Button";
 import { Skeleton } from "../components/ui/Skeleton";
 import { EmptyState } from "../components/ui/EmptyState";
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL || "";
-
 const WriteArticle = () => {
   const articleLength = [
     { length: 800, text: "Short (500-800 words)" },

@@ -17,9 +17,23 @@ const cleanAIResponse = (text) => {
   return text.replace(/<thought>[\s\S]*?<\/thought>/gi, "").trim();
 };
 
+// Helper function to safely extract userId from Clerk auth object in all environments
+const getUserId = async (req) => {
+  if (!req.auth) return null;
+  if (typeof req.auth === "function") {
+    const authObj = await req.auth();
+    return authObj?.userId;
+  }
+  return req.auth?.userId;
+};
+
 export const generateArticle = async (req, res) => {
   try {
-    const { userId } = req.auth();
+    const userId = await getUserId(req);
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized: Sign in required" });
+    }
+
     const { prompt, length } = req.body;
 
     const targetWords = length ? parseInt(length) : 1200;
@@ -48,14 +62,18 @@ export const generateArticle = async (req, res) => {
 
     res.json({ success: true, content });
   } catch (error) {
-    console.log(error.message);
+    console.error("Generate Article Error:", error.message);
     res.json({ success: false, message: error.message });
   }
 };
 
 export const generateBlogTitle = async (req, res) => {
   try {
-    const { userId } = req.auth();
+    const userId = await getUserId(req);
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized: Sign in required" });
+    }
+
     const { prompt } = req.body;
 
     const response = await AI.chat.completions.create({
@@ -79,14 +97,18 @@ export const generateBlogTitle = async (req, res) => {
 
     res.json({ success: true, content });
   } catch (error) {
-    console.log(error.message);
+    console.error("Generate Blog Title Error:", error.message);
     res.json({ success: false, message: error.message });
   }
 };
 
 export const generateImage = async (req, res) => {
   try {
-    const { userId } = req.auth();
+    const userId = await getUserId(req);
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized: Sign in required" });
+    }
+
     const { prompt, publish } = req.body;
 
     let imageUrl = "";
@@ -127,15 +149,22 @@ export const generateImage = async (req, res) => {
 
     res.json({ success: true, content: imageUrl });
   } catch (error) {
-    console.log(error.message);
+    console.error("Generate Image Error:", error.message);
     res.json({ success: false, message: error.message });
   }
 };
 
 export const removeImageBackground = async (req, res) => {
+  const image = req.file;
   try {
-    const { userId } = req.auth();
-    const image = req.file;
+    const userId = await getUserId(req);
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized: Sign in required" });
+    }
+
+    if (!image) {
+      return res.json({ success: false, message: "No image file provided" });
+    }
 
     const { secure_url } = await cloudinary.uploader.upload(image.path, {
       transformation: [
@@ -150,16 +179,27 @@ export const removeImageBackground = async (req, res) => {
 
     res.json({ success: true, content: secure_url });
   } catch (error) {
-    console.log(error.message);
+    console.error("Remove Background Error:", error.message);
     res.json({ success: false, message: error.message });
+  } finally {
+    if (image?.path && fs.existsSync(image.path)) {
+      try { fs.unlinkSync(image.path); } catch (e) {}
+    }
   }
 };
 
 export const removeImageObject = async (req, res) => {
+  const image = req.file;
   try {
-    const { userId } = req.auth();
+    const userId = await getUserId(req);
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized: Sign in required" });
+    }
+
     const { object } = req.body;
-    const image = req.file;
+    if (!image) {
+      return res.json({ success: false, message: "No image file provided" });
+    }
 
     const { public_id } = await cloudinary.uploader.upload(image.path);
 
@@ -172,15 +212,26 @@ export const removeImageObject = async (req, res) => {
 
     res.json({ success: true, content: imageUrl });
   } catch (error) {
-    console.log(error.message);
+    console.error("Remove Object Error:", error.message);
     res.json({ success: false, message: error.message });
+  } finally {
+    if (image?.path && fs.existsSync(image.path)) {
+      try { fs.unlinkSync(image.path); } catch (e) {}
+    }
   }
 };
 
 export const resumeReview = async (req, res) => {
+  const resume = req.file;
   try {
-    const { userId } = req.auth();
-    const resume = req.file;
+    const userId = await getUserId(req);
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized: Sign in required" });
+    }
+
+    if (!resume) {
+      return res.json({ success: false, message: "No resume PDF file provided" });
+    }
 
     if (resume.size > 10 * 1024 * 1024) {
       return res.json({
@@ -215,10 +266,11 @@ export const resumeReview = async (req, res) => {
 
     res.json({ success: true, content });
   } catch (error) {
-    console.log(error.message);
+    console.error("Resume Review Error:", error.message);
     res.json({ success: false, message: error.message });
+  } finally {
+    if (resume?.path && fs.existsSync(resume.path)) {
+      try { fs.unlinkSync(resume.path); } catch (e) {}
+    }
   }
 };
-
-
-

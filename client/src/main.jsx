@@ -7,10 +7,17 @@ import { ThemeProvider } from "./context/ThemeContext";
 import axios from "axios";
 
 // Configure global Axios API Base URL for local & production deployment
-axios.defaults.baseURL =
+const rawBaseUrl =
   import.meta.env.VITE_BASE_URL ||
   import.meta.env.VITE_API_BASE_URL ||
   "";
+
+// In production builds, strip any localhost URLs to prevent ERR_CONNECTION_REFUSED
+if (import.meta.env.PROD && rawBaseUrl.includes("localhost")) {
+  axios.defaults.baseURL = "";
+} else {
+  axios.defaults.baseURL = rawBaseUrl;
+}
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 

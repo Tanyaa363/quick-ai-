@@ -8,8 +8,6 @@ import { Badge } from "../components/ui/Badge";
 import { Skeleton } from "../components/ui/Skeleton";
 import { EmptyState } from "../components/ui/EmptyState";
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL || "";
-
 const Community = () => {
   const [creations, setCreations] = useState([]);
   const { user } = useUser();

@@ -9,8 +9,6 @@ import { Button } from "../components/ui/Button";
 import { Skeleton } from "../components/ui/Skeleton";
 import { EmptyState } from "../components/ui/EmptyState";
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL || "";
-
 const ReviewResume = () => {
   const [input, setInput] = useState(null);
   const [loading, setLoading] = useState(false);

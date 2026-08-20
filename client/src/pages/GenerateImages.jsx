@@ -8,8 +8,6 @@ import { Button } from "../components/ui/Button";
 import { Skeleton } from "../components/ui/Skeleton";
 import { EmptyState } from "../components/ui/EmptyState";
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL || "";
-
 const GenerateImages = () => {
   const imageStyle = [
     "Realistic",
