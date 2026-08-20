@@ -16,7 +16,6 @@ const routeNames = {
   "/ai/remove-object": "Remove Object",
   "/ai/review-resume": "Review Resume",
   "/ai/community": "Community",
-  "/ai/pricing": "Pricing & Plans",
 };
 
 

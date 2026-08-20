@@ -17,22 +17,10 @@ const cleanAIResponse = (text) => {
   return text.replace(/<thought>[\s\S]*?<\/thought>/gi, "").trim();
 };
 
-// Helper function: Unlimited generations for all users
-const checkAndIncrementUsage = async (userId, plan, free_usage) => {
-  return { allowed: true };
-};
-
-
 export const generateArticle = async (req, res) => {
   try {
     const { userId } = req.auth();
     const { prompt, length } = req.body;
-    const { plan, free_usage } = req;
-
-    const usageCheck = await checkAndIncrementUsage(userId, plan, free_usage);
-    if (!usageCheck.allowed) {
-      return res.json({ success: false, isLimitReached: true, message: usageCheck.message });
-    }
 
     const targetWords = length ? parseInt(length) : 1200;
     const maxTokens = Math.max(3000, Math.ceil(targetWords * 3.0));
@@ -69,12 +57,6 @@ export const generateBlogTitle = async (req, res) => {
   try {
     const { userId } = req.auth();
     const { prompt } = req.body;
-    const { plan, free_usage } = req;
-
-    const usageCheck = await checkAndIncrementUsage(userId, plan, free_usage);
-    if (!usageCheck.allowed) {
-      return res.json({ success: false, isLimitReached: true, message: usageCheck.message });
-    }
 
     const response = await AI.chat.completions.create({
       model: "gemini-3.5-flash",
@@ -106,12 +88,6 @@ export const generateImage = async (req, res) => {
   try {
     const { userId } = req.auth();
     const { prompt, publish } = req.body;
-    const { plan, free_usage } = req;
-
-    const usageCheck = await checkAndIncrementUsage(userId, plan, free_usage);
-    if (!usageCheck.allowed) {
-      return res.json({ success: false, isLimitReached: true, message: usageCheck.message });
-    }
 
     let imageUrl = "";
 
@@ -160,12 +136,6 @@ export const removeImageBackground = async (req, res) => {
   try {
     const { userId } = req.auth();
     const image = req.file;
-    const { plan, free_usage } = req;
-
-    const usageCheck = await checkAndIncrementUsage(userId, plan, free_usage);
-    if (!usageCheck.allowed) {
-      return res.json({ success: false, isLimitReached: true, message: usageCheck.message });
-    }
 
     const { secure_url } = await cloudinary.uploader.upload(image.path, {
       transformation: [
@@ -190,12 +160,6 @@ export const removeImageObject = async (req, res) => {
     const { userId } = req.auth();
     const { object } = req.body;
     const image = req.file;
-    const { plan, free_usage } = req;
-
-    const usageCheck = await checkAndIncrementUsage(userId, plan, free_usage);
-    if (!usageCheck.allowed) {
-      return res.json({ success: false, isLimitReached: true, message: usageCheck.message });
-    }
 
     const { public_id } = await cloudinary.uploader.upload(image.path);
 
@@ -217,12 +181,6 @@ export const resumeReview = async (req, res) => {
   try {
     const { userId } = req.auth();
     const resume = req.file;
-    const { plan, free_usage } = req;
-
-    const usageCheck = await checkAndIncrementUsage(userId, plan, free_usage);
-    if (!usageCheck.allowed) {
-      return res.json({ success: false, isLimitReached: true, message: usageCheck.message });
-    }
 
     if (resume.size > 10 * 1024 * 1024) {
       return res.json({

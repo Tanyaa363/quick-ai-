@@ -1,6 +1,6 @@
 import { clerkClient } from "@clerk/express";
 
-// Middleware to authorize user and grant 100% unlimited access to all features
+// Middleware to authorize user
 export const auth = async (req, res, next) => {
   try {
     const { userId } = await req.auth();
@@ -11,8 +11,6 @@ export const auth = async (req, res, next) => {
         .json({ success: false, message: "Unauthorized: Sign in required" });
     }
 
-    req.plan = "premium";
-    req.free_usage = 0;
     next();
   } catch (error) {
     res.status(401).json({ success: false, message: error.message });

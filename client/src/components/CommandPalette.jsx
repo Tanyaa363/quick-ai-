@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, X, SquarePen, Hash, Image, Eraser, Scissors, FileText, Users, House, CreditCard } from "lucide-react";
+import { Search, X, SquarePen, Hash, Image, Eraser, Scissors, FileText, Users, House } from "lucide-react";
 
 const commands = [
   { id: "dashboard", name: "Dashboard", category: "Navigation", path: "/ai", icon: House },
@@ -11,7 +11,6 @@ const commands = [
   { id: "obj-remove", name: "Remove Object", category: "AI Tools", path: "/ai/remove-object", icon: Scissors },
   { id: "resume", name: "Review Resume", category: "AI Tools", path: "/ai/review-resume", icon: FileText },
   { id: "community", name: "Community", category: "Social", path: "/ai/community", icon: Users },
-  { id: "pricing", name: "Pricing & Plans", category: "Subscription", path: "/ai/pricing", icon: CreditCard },
 ];
 
 

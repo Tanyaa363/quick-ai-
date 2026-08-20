@@ -48,7 +48,7 @@ const Dashboard = () => {
             Overview
           </h1>
           <p className="text-sm font-medium text-slate-600 dark:text-zinc-400 mt-1">
-            Monitor your AI activity, generated assets, and account subscription status.
+            Monitor your AI activity and generated assets.
           </p>
         </div>
 

@@ -58,21 +58,3 @@ export const toggleLikeCreation = async (req, res) => {
   }
 };
 
-export const createCheckoutSession = async (req, res) => {
-  try {
-    const { userId } = req.auth();
-    const { planId, billingInterval } = req.body;
-
-    // Simulate Stripe/Payment Checkout Session creation
-    const sessionUrl = process.env.CLIENT_URL || "http://localhost:5173/ai";
-
-    res.json({
-      success: true,
-      url: sessionUrl,
-      message: `Checkout session initiated for ${planId} (${billingInterval})`,
-    });
-  } catch (error) {
-    res.json({ success: false, message: error.message });
-  }
-};
-

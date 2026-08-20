@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Image, Sparkles, Wand2, Download, Loader2 } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Card } from "../components/ui/Card";
 import { Button } from "../components/ui/Button";
@@ -31,7 +30,6 @@ const GenerateImages = () => {
   const [isDownloading, setIsDownloading] = useState(false);
 
   const { getToken } = useAuth();
-  const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -55,9 +53,6 @@ const GenerateImages = () => {
         toast.success("Image generated successfully!");
       } else {
         toast.error(data.message || "Failed to generate image.");
-        if (data.isLimitReached) {
-          setTimeout(() => navigate("/ai/pricing"), 1500);
-        }
       }
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);

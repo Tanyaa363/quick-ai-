@@ -12,17 +12,25 @@ axios.defaults.baseURL =
   import.meta.env.VITE_API_BASE_URL ||
   "";
 
-
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 const RootApp = () => {
+  if (!PUBLISHABLE_KEY) {
+    return (
+      <div style={{ padding: "40px", fontFamily: "sans-serif", textAlign: "center" }}>
+        <h2>Configuration Missing</h2>
+        <p>
+          <code>VITE_CLERK_PUBLISHABLE_KEY</code> environment variable is not defined.
+        </p>
+        <p style={{ color: "#666" }}>
+          Please add <strong>VITE_CLERK_PUBLISHABLE_KEY</strong> in your Vercel Project Settings &gt; Environment Variables and redeploy.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <ClerkProvider
-      publishableKey={
-        PUBLISHABLE_KEY ||
-        "pk_test_ZXhhbXBsZS1jbGVyay1rZXkuY2xlcmsuYWNjb3VudHMuZGV2JA"
-      }
-    >
+    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
       <ThemeProvider>
         <BrowserRouter>
           <App />

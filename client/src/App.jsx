@@ -9,7 +9,6 @@ import RemoveBackground from "./pages/RemoveBackground";
 import RemoveObject from "./pages/RemoveObject";
 import ReviewResume from "./pages/ReviewResume";
 import Community from "./pages/Community";
-import { Pricing } from "./components/Pricing";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
@@ -27,7 +26,6 @@ const App = () => {
           <Route path="remove-object" element={<RemoveObject />} />
           <Route path="review-resume" element={<ReviewResume />} />
           <Route path="community" element={<Community />} />
-          <Route path="pricing" element={<Pricing />} />
         </Route>
       </Routes>
     </div>

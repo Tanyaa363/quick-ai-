@@ -2,7 +2,6 @@ import { useState } from "react";
 import { FileText, Sparkles, Wand2 } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Markdown from "react-markdown";
 import { Card } from "../components/ui/Card";
@@ -18,7 +17,6 @@ const ReviewResume = () => {
   const [content, setContent] = useState("");
 
   const { getToken } = useAuth();
-  const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -42,9 +40,6 @@ const ReviewResume = () => {
         toast.success("Resume analysis complete!");
       } else {
         toast.error(data.message);
-        if (data.isLimitReached) {
-          setTimeout(() => navigate("/ai/pricing"), 1500);
-        }
       }
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);

@@ -10,7 +10,6 @@ import {
   Users,
   LogOut,
   Sparkles,
-  CreditCard,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { Badge } from "./ui/Badge";
@@ -24,7 +23,6 @@ const navItems = [
   { to: "/ai/remove-object", label: "Remove Object", Icon: Scissors },
   { to: "/ai/review-resume", label: "Review Resume", Icon: FileText },
   { to: "/ai/community", label: "Community", Icon: Users },
-  { to: "/ai/pricing", label: "Pricing", Icon: CreditCard },
 ];
 
 

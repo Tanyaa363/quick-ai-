@@ -4,7 +4,6 @@ import {
   getPublishedCreations,
   getUserCreations,
   toggleLikeCreation,
-  createCheckoutSession,
 } from "../controllers/userController.js";
 
 const userRouter = express.Router();
@@ -12,7 +11,6 @@ const userRouter = express.Router();
 userRouter.get("/get-user-creations", auth, getUserCreations);
 userRouter.get("/get-published-creations", auth, getPublishedCreations);
 userRouter.post("/toggle-like-creation", auth, toggleLikeCreation);
-userRouter.post("/create-checkout-session", auth, createCheckoutSession);
 
 export default userRouter;
 
