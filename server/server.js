@@ -53,11 +53,16 @@ app.use(
 
 app.get("/", (req, res) => res.send("Server is Live!"));
 
+// Mount API routers across all possible Vercel rewrite URL variations
 app.use("/api/ai", aiRouter);
 app.use("/ai", aiRouter);
 
 app.use("/api/user", userRouter);
 app.use("/user", userRouter);
+
+// Fallback mounts for single-level rewrites or stripped paths
+app.use("/api", aiRouter);
+app.use("/api", userRouter);
 
 
 // 404 handler for unhandled API routes
