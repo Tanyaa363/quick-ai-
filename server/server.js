@@ -39,13 +39,21 @@ app.use(
   })
 );
 
-
+// Middleware to normalize Vercel serverless request URLs
+app.use((req, res, next) => {
+  const realUrl = req.headers["x-matched-path"] || req.url;
+  if (realUrl && realUrl !== req.url && realUrl.startsWith("/api")) {
+    req.url = realUrl;
+  }
+  next();
+});
 
 app.use(express.json());
 app.use(
   clerkMiddleware({
     publishableKey:
       process.env.CLERK_PUBLISHABLE_KEY ||
+      process.env.VITE_CLERK_PUBLISHABLE_KEY ||
       "pk_test_ZXhhbXBsZS1jbGVyay1rZXkuY2xlcmsuYWNjb3VudHMuZGV2JA",
     secretKey: process.env.CLERK_SECRET_KEY || "sk_test_placeholder_secret_key",
   })
@@ -64,7 +72,6 @@ app.use("/user", userRouter);
 app.use("/api", aiRouter);
 app.use("/api", userRouter);
 
-
 // 404 handler for unhandled API routes
 app.use((req, res, next) => {
   if (req.path.startsWith("/api")) {
@@ -72,7 +79,6 @@ app.use((req, res, next) => {
   }
   next();
 });
-
 
 // Global error handling middleware
 app.use((err, req, res, next) => {
@@ -94,5 +100,3 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export default app;
-
-
