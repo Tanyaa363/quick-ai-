@@ -25,7 +25,7 @@ app.use((req, res, next) => {
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
   if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
+    return res.status(200).end();
   }
   next();
 });
@@ -38,6 +38,7 @@ app.use(
     allowedHeaders: ["*"],
   })
 );
+app.options("*", cors());
 
 app.use(express.json());
 app.use(
@@ -52,12 +53,20 @@ app.use(
 
 app.get("/", (req, res) => res.send("Server is Live!"));
 
-// Mount API routers
+// Mount API routers with all path prefix variations for Vercel serverless rewrites
 app.use("/api/ai", aiRouter);
 app.use("/ai", aiRouter);
+app.use("/generate-article", aiRouter);
+app.use("/generate-blog-title", aiRouter);
+app.use("/generate-image", aiRouter);
+app.use("/remove-image-background", aiRouter);
+app.use("/remove-image-object", aiRouter);
+app.use("/resume-review", aiRouter);
 
 app.use("/api/user", userRouter);
 app.use("/user", userRouter);
+app.use("/get-user-creations", userRouter);
+app.use("/get-published-creations", userRouter);
 
 // 404 handler for unhandled API routes
 app.use((req, res, next) => {
